@@ -1,0 +1,15 @@
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.coverage.run]
+source = ["app"]
+omit = ["app/db/models/*", "app/config/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false

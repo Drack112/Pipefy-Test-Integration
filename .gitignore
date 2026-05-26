@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment
+.env
+.env.prod
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Generated on server startup
+schema.graphql
+
+# IDEs
+.vscode/
+.idea/
+*.swp

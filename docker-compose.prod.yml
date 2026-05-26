@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: always
+
+  api:
+    build:
+      context: .
+      target: production
+    ports:
+      - "0.0.0.0:${PORT:-8000}:8000"
+    environment:
+      - APP_NAME=${APP_NAME}
+      - APP_VERSION=${APP_VERSION}
+      - APP_ENV=production
+      - DEBUG=false
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8000}
+      - DATABASE_URL=${DATABASE_URL}
+      - PIPEFY_API_URL=${PIPEFY_API_URL}
+      - PIPEFY_TOKEN=${PIPEFY_TOKEN}
+      - PIPEFY_PIPE_ID=${PIPEFY_PIPE_ID}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+
+volumes:
+  postgres_data:
