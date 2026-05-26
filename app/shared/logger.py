@@ -4,7 +4,10 @@ import sys
 _DEV_FMT = (
     "%(asctime)s %(levelname)-8s [%(name)s:%(lineno)d] %(funcName)s — %(message)s"
 )
-_PROD_FMT = '{"time":"%(asctime)s","level":"%(levelname)s","logger":"%(name)s","message":"%(message)s"}'
+_PROD_FMT = (
+    '{"time":"%(asctime)s","level":"%(levelname)s",'
+    '"logger":"%(name)s","message":"%(message)s"}'
+)
 
 
 def setup_logging(debug: bool = False, env: str = "development") -> None:

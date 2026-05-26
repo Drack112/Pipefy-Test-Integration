@@ -24,8 +24,9 @@ def mock_pipefy():
     with patch(
         "app.integrations.pipefy.PipefyService.create_card",
         return_value="card_test_001",
-    ), patch("app.integrations.pipefy.PipefyService.update_card"):
-        yield
+    ):
+        with patch("app.integrations.pipefy.PipefyService.update_card"):
+            yield
 
 
 def _create_client(client, name, email, patrimony_value):
@@ -93,9 +94,7 @@ class TestWebhookPriority:
     def test_pipefy_update_called_with_correct_args(self, client):
         _create_client(client, "Luiza P", "luiza@test.com", 250000)
 
-        with patch(
-            "app.integrations.pipefy.PipefyService.update_card"
-        ) as mock_update:
+        with patch("app.integrations.pipefy.PipefyService.update_card") as mock_update:
             _webhook(client, "evt_005", "card_005", "luiza@test.com")
 
             mock_update.assert_called_once_with(
@@ -119,9 +118,7 @@ class TestWebhookIdempotency:
     def test_duplicate_does_not_call_pipefy_again(self, client):
         _create_client(client, "Sofia Idem", "sofia@test.com", 250000)
 
-        with patch(
-            "app.integrations.pipefy.PipefyService.update_card"
-        ) as mock_update:
+        with patch("app.integrations.pipefy.PipefyService.update_card") as mock_update:
             _webhook(client, "evt_dedup", "card_dedup", "sofia@test.com")
             _webhook(client, "evt_dedup", "card_dedup", "sofia@test.com")
 

@@ -60,7 +60,10 @@ class PipefyService:
                 "fields_attributes": [
                     {"field_id": "nome_do_cliente", "field_value": name},
                     {"field_id": "email", "field_value": email},
-                    {"field_id": "valor_patrim_nio", "field_value": str(patrimony_value)},
+                    {
+                        "field_id": "valor_patrim_nio",
+                        "field_value": str(patrimony_value),
+                    },
                 ],
             },
         }
