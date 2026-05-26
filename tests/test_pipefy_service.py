@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -12,9 +13,15 @@ def _mock_http_response(body: dict) -> MagicMock:
     return resp
 
 
+@contextmanager
 def _patch_post(body: dict):
     mock_resp = _mock_http_response(body)
-    return patch("httpx.Client.post", return_value=mock_resp)
+    with patch("app.integrations.pipefy.settings") as mock_settings:
+        mock_settings.pipefy_token = "fake-token"
+        mock_settings.pipefy_pipe_id = "fake-pipe-id"
+        mock_settings.pipefy_api_url = "https://api.pipefy.com/graphql"
+        with patch("httpx.Client.post", return_value=mock_resp) as mock_post:
+            yield mock_post
 
 
 class TestPipefyServiceCreateCard:
